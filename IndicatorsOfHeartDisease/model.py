@@ -12,15 +12,12 @@ import sys
 
 
 class Model(object):
-    def __init__(self, filename):
+    def __init__(self, data):
         '''
             Currently only accepts .csv files.
         '''
-        if '.csv' not in filename:
-            raise Exception('The Model object only accepts .csv files at this time.')
         self.score = None
-        self.filename = filename
-        self.data = None
+        self.data = data
         self.X_train = None
         self.X_test = None
         self.y_train = None
@@ -32,11 +29,6 @@ class Model(object):
 
 
     def prepare_data(self):
-        try:
-            self.data = pd.read_csv(self.filename)
-        except Exception as ERROR:
-            raise
-    
         print(f'\n\nData Shape: {self.data.shape[0]}')
         print('\n\n------  Cleaning data   ------')
         print(f'\n\nNumber of Data Records: {self.data.shape[0]}')
@@ -126,12 +118,14 @@ if __name__ == '__main__':
     pdo.set_pandas_display_options(max_columns=1000, max_rows=1000, max_colwidth=199, width=1000)
     if not sys.argv[1]:
         raise Exception('Please provide a file name.')
-
-    model = Model(sys.argv[1])
+    data = pd.read_csv(sys.argv[1])
+    model = Model(data)
     model.train()
     model.test()
-    print('Model Accuracy: ', model.get_accuracy())
+    accuracy = model.get_accuracy()
 
+
+    print('Model Accuracy: ', model.get_accuracy())
     
     
     
